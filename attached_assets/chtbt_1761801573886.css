@@ -1,0 +1,466 @@
+/* --- Basic CSS Reset --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+
+html,
+body,
+#app {
+    height: 100%
+}
+
+body {
+    font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+    line-height: 1.4;
+    color: #1f2937;
+    background: #f3f4f6
+}
+
+/* --- Layout --- */
+.container {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 20px
+}
+
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px
+}
+
+.brand {
+    display: flex;
+    gap: 12px;
+    align-items: center
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700
+}
+
+h1 {
+    font-size: 18px
+}
+
+.top-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    background: #1e4ed8;
+}
+
+button.ghost {
+    background: transparent;
+    color: #374151;
+    border: 1px solid rgba(0, 0, 0, 0.06)
+}
+
+/* --- Grid --- */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px
+}
+
+@media(min-width:900px) {
+    .grid {
+        grid-template-columns: 240px 1fr
+    }
+}
+
+/* --- Sidebar --- */
+nav {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(10, 20, 40, 0.04)
+}
+
+.nav-item {
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.nav-item:hover {
+    background: #f8fafc
+}
+
+.nav-item.active {
+    background: linear-gradient(90deg, #eef2ff, #eef7ff);
+    font-weight: 600
+}
+
+/* --- Dashboard cards --- */
+.card {
+    background: white;
+    padding: 14px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(10, 20, 40, 0.04)
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 12px
+}
+
+@media(min-width:640px) {
+    .cards {
+        grid-template-columns: repeat(2, 1fr)
+    }
+}
+
+.small {
+    font-size: 13px;
+    color: #6b7280
+}
+
+.big {
+    font-size: 20px;
+    font-weight: 700
+}
+
+/* --- Booking modal --- */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.modal {
+    width: 100%;
+    max-width: 520px;
+    background: white;
+    padding: 16px;
+    border-radius: 12px
+}
+
+.form-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px
+}
+
+.form-row input,
+.form-row select,
+textarea {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #e6edf3
+}
+
+/* --- Chatbot widget --- */
+.chatbot {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    width: 320px;
+    max-height: 70vh;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(16, 24, 40, 0.25);
+    display: flex;
+    flex-direction: column
+}
+
+.chatbot .header {
+    background: linear-gradient(90deg, #06b6d4, #3b82f6);
+    color: white;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.chatbot .messages {
+    background: white;
+    padding: 12px;
+    flex: 1;
+    overflow: auto
+}
+
+.msg {
+    margin-bottom: 12px;
+    max-width: 78%
+}
+
+.msg.user {
+    margin-left: auto;
+    background: #eef2ff;
+    padding: 8px;
+    border-radius: 10px
+}
+
+.msg.bot {
+    background: #f3f4f6;
+    padding: 8px;
+    border-radius: 10px
+}
+
+.chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #eef2f7;
+    background: #fff
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #e6edf3
+}
+
+.badge {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 12px
+}
+
+/* --- Utility --- */
+.muted {
+    color: #6b7280
+}
+
+.flex {
+    display: flex;
+    gap: 8px;
+    align-items: center
+}
+
+.mb {
+    margin-bottom: 8px
+}
+
+footer {
+    margin-top: 18px;
+    text-align: center;
+    color: #6b7280;
+    font-size: 13px
+}
+
+/* Chatbot logo button */
+#chatbotLogoBtn {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    box-shadow: 0 4px 16px rgba(16, 24, 40, 0.18);
+    cursor: pointer;
+    z-index: 1001;
+}
+
+/* Make chatbot widget appear above everything */
+#chatbot {
+    z-index: 1002;
+}
+
+/* ===================================================
+   🌟 MODERN TIMETABLE DESIGN
+=================================================== */
+#timetableView {
+    padding: 16px;
+}
+
+#timetableGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 16px;
+}
+
+/* Each Day Card */
+.day-card {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    padding: 14px;
+    transition: all 0.25s ease;
+}
+
+.day-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.day-card h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #2563eb;
+}
+
+/* Subject Card inside each Day */
+.subject-card {
+    position: relative;
+    background: #f9fafb;
+    border-left: 4px solid #60a5fa;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.subject-card:hover {
+    background: #eff6ff;
+    transform: scale(1.02);
+}
+
+/* Hover Tooltip */
+.subject-card::after {
+    content: attr(data-tooltip);
+    white-space: pre-line;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #111827;
+    color: #f9fafb;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    width: 180px;
+    z-index: 999;
+}
+
+.subject-card:hover::after {
+    opacity: 1;
+}
+
+/* Color Codes by Subject Type */
+.subject-card[data-tooltip*="Java"] {
+    border-left-color: #7c3aed;
+}
+
+.subject-card[data-tooltip*="E-COMM"] {
+    border-left-color: #2563eb;
+}
+
+.subject-card[data-tooltip*="MP"] {
+    border-left-color: #059669;
+}
+
+.subject-card[data-tooltip*="SE"] {
+    border-left-color: #f59e0b;
+}
+
+.subject-card[data-tooltip*="AAD"] {
+    border-left-color: #ef4444;
+}
+
+.subject-card[data-tooltip*="ADD"] {
+    border-left-color: #10b981;
+}
+
+/* Small text */
+.subject-card small {
+    color: #6b7280;
+}
+
+/* Quick timetable (moved from HTML) */
+.quick-timetable {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.qt-card {
+    background: #ffffff;
+    border: 1px solid #e6edf3;
+    border-radius: 10px;
+    padding: 10px 12px;
+    min-width: 170px;
+    flex: 1 1 170px;
+    box-shadow: 0 6px 18px rgba(10, 25, 47, 0.04);
+    transition: transform .12s ease, box-shadow .12s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.qt-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(10, 25, 47, 0.08);
+}
+
+.qt-time {
+    font-weight: 700;
+    color: #0f1724;
+    font-size: 13px;
+}
+
+.qt-title {
+    font-size: 14px;
+    color: #0b5394;
+    font-weight: 600;
+}
+
+.qt-room {
+    font-size: 12px;
+    color: #475569;
+}
+
+.qt-muted {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+@media (max-width: 520px) {
+    .quick-timetable {
+        gap: 8px;
+    }
+
+    .qt-card {
+        min-width: 140px;
+        padding: 9px;
+        flex: 1 1 140px;
+    }
+}

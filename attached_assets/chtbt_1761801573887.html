@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Smart Campus Portal </title>
+
+    <link rel="stylesheet" href="chtbt.css" />
+
+    <!-- Quick timetable styles moved to chtbt.css -->
+</head>
+
+<body>
+    <div id="app" class="container">
+        <header>
+            <div class="brand">
+                <div class="logo">SC</div>
+                <div>
+                    <h1>Smart Campus Portal</h1>
+                    <div class="small">Polytechnic Srinagar Garhwal</div>
+                </div>
+            </div>
+            <div class="top-actions">
+                <div id="userBadge" class="badge"></div>
+                <button id="loginBtn">Login</button>
+                <button id="logoutBtn" style="display:none;">Logout</button> <!-- added logout button -->
+                <button id="resetBtn" class="ghost">Reset Data</button>
+            </div>
+        </header>
+
+        <main class="grid">
+            <nav>
+                <div id="navHome" class="nav-item active">🏠 Dashboard</div>
+                <div id="navTimetable" class="nav-item">📅 Timetable</div>
+                <div id="navBookings" class="nav-item">📘 Researvation</div>
+                <div id="navMap" class="nav-item">🗺️ Campus Map</div>
+                <div id="navHelp" class="nav-item">❓ Help / Chatbot</div>
+            </nav>
+
+            <section id="mainContent">
+                <!-- Dashboard -->
+                <div id="homeView">
+                    <div class="cards">
+                        <div class="card">
+                            <div class="small">Today</div>
+                            <div id="todayClasses" class="big">Loading...</div>
+                            <div class="small muted">Next class, quick actions below</div>
+                            <div style="margin-top:12px" class="flex">
+                                <button id="btnDirections" class="ghost">Get Directions</button>
+                                <button id="btnBookLab">Reserve Lab</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="small">Announcements</div>
+                            <div id="announcements" style="margin-top:8px"></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;" class="card">
+                        <div class="small">Quick timetable</div>
+
+                        <!-- replaced table with a clean card-based quick timetable -->
+                        <div id="quickTable" class="quick-timetable" aria-live="polite"></div>
+
+                    </div>
+                </div>
+
+                <!-- 📅 Modern Card-Based Timetable View -->
+                <div id="timetableView" style="display:none;">
+                    <h2 class="section-title">Weekly Timetable</h2>
+
+                    <div class="timetable-grid" id="timetableGrid">
+                        <!-- Cards will be injected by JS -->
+                    </div>
+                </div>
+
+
+
+                <!-- Bookings -->
+                <div id="bookingsView" style="display:none">
+                    <div class="card">
+                        <div class="small">Reserve Seat</div>
+                        <div style="margin-top:8px" class="flex">
+                            <select id="resourceSelect"></select>
+                            <input id="bookDate" type="date" />
+                            <input id="bookFrom" type="time" />
+                            <input id="bookTo" type="time" />
+                            <button id="makeBooking">Request</button>
+                        </div>
+                        <div style="margin-top:12px" id="bookingList"></div>
+                    </div>
+                </div>
+
+                <!-- Map -->
+                <div id="mapView" style="display:none">
+                    <div class="card">
+                        <div class="small">Campus Map</div>
+                        <div style="margin-top:12px">
+                            <!-- simple svg layout -->
+                            <svg viewBox="0 0 600 300"
+                                style="width:100%;height:260px;border-radius:8px;background:#f8fafc">
+                                <rect x="20" y="20" width="180" height="120" rx="8" fill="#ffffff" stroke="#e6edf3" />
+                                <text x="30" y="50" font-size="14">Admin Block</text>
+                                <rect x="220" y="20" width="180" height="120" rx="8" fill="#ffffff" stroke="#e6edf3" />
+                                <text x="230" y="50" font-size="14">Library</text>
+                                <rect x="420" y="20" width="160" height="220" rx="8" fill="#ffffff" stroke="#e6edf3" />
+                                <text x="430" y="50" font-size="14">Labs</text>
+                                <circle cx="110" cy="200" r="40" fill="#fff" stroke="#e6edf3" />
+                                <text x="80" y="205" font-size="12">Canteen</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Help -->
+                <div id="helpView" style="display:none">
+                    <div class="card">
+                        <div class="small">Help & Chatbot</div>
+                        <p style="margin-top:8px" class="muted">Use the chatbot widget at bottom-right to ask for
+                            timetable, Researvation, map directions, or report issues.</p>
+                    </div>
+                </div>
+
+            </section>
+        </main>
+
+        <footer class="muted">smart portal chatbot </footer>
+    </div> <!-- ...existing code... --> <!-- removed stray "F" -->
+
+    <!-- Booking modal (hidden) -->
+    <div id="modalHolder"></div>
+
+    <!-- Chatbot logo button -->
+    <div id="chatbotLogoBtn" title="Open Chatbot">💬</div>
+
+    <!-- Chatbot widget -->
+    <div id="chatbot" class="chatbot" aria-hidden="true" style="display:none;">
+        <div class="header">
+            <div style="font-weight:700">Campus Bot</div>
+            <div style="flex:1"></div>
+            <button id="resetChat" style="background:transparent;border:none;color:white;cursor:pointer"
+                title="Reset Chat History">⟲</button>
+            <button id="closeChat" style="background:transparent;border:none;color:white;cursor:pointer">✕</button>
+        </div>
+        <div class="messages" id="chatMessages"></div>
+        <div class="chat-input">
+            <input id="chatInput" placeholder="Ask: 'What's my timetable' or 'Reserve lab tomorrow 2pm'" />
+            <button id="sendChat">Send</button>
+        </div>
+    </div> <!-- closed chatbot div properly -->
+
+    <script src="chtbt.js"></script>
+</body>
+
+</html>

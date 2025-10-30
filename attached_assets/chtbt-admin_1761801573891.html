@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Campus Admin Panel</title>
+    <link rel="stylesheet" href="chtbt-admin.css" />
+</head>
+
+<body>
+    <aside class="sidebar">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li class="active" data-section="dashboard">📊 Dashboard</li>
+            <li data-section="students">🎓 Students</li>
+            <li data-section="faculty">👨‍🏫 Faculty</li>
+            <li data-section="announcements">📢 Announcements</li>
+            <li data-section="settings">⚙️ Settings</li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        <header>
+            <h1 id="section-title">Dashboard</h1>
+            <button id="logout-btn">Logout</button>
+        </header>
+
+        <!-- Dashboard -->
+        <section id="dashboard" class="section active">
+            <div class="cards">
+                <div class="card">
+                    <h3>Total Students</h3>
+                    <p id="student-count">0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Faculty</h3>
+                    <p id="faculty-count">0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Announcements</h3>
+                    <p id="announcement-count">0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Students -->
+        <section id="students" class="section">
+            <h2>Manage Students</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Father's Name</th>
+                        <th>Course</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="student-table"></tbody>
+            </table>
+            <button class="add-btn" id="add-student">+ Add Student</button>
+        </section>
+
+        <!-- Faculty -->
+        <section id="faculty" class="section">
+            <h2>Manage Faculty</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="faculty-table"></tbody>
+            </table>
+            <button class="add-btn" id="add-faculty">+ Add Faculty</button>
+        </section>
+
+        <!-- Announcements -->
+        <section id="announcements" class="section">
+            <h2>Post Announcement</h2>
+            <textarea id="announcement-text" placeholder="Write announcement..."></textarea>
+            <button id="post-announcement">Post</button>
+            <div id="announcement-feed"></div>
+        </section>
+
+        <!-- Settings -->
+        <section id="settings" class="section">
+            <h2>Admin Settings</h2>
+            <p>Dark Mode and account settings will be added here later.</p>
+        </section>
+    </main>
+
+    <script src="chtbt-admin.js"></script>
+</body>
+
+</html>

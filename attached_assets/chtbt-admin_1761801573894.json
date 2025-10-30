@@ -1,0 +1,24 @@
+{
+    "students": [
+        {
+            "name": "Aarav Sharma",
+            "course": "Computer Engg"
+        },
+        {
+            "name": "Priya Verma",
+            "course": "Electrical Engg"
+        }
+    ],
+    "faculty": [
+        {
+            "name": "Dr. Meena Gupta",
+            "dept": "CSE"
+        }
+    ],
+    "announcements": [
+        {
+            "text": "Zonal Games will start next week!",
+            "time": "20 Oct 2025, 6:15 PM"
+        }
+    ]
+}
