@@ -26,6 +26,14 @@ export default function LoginPage() {
         description: "Welcome to Admin Panel",
       });
       setLocation("/admin");
+    } else if (username === "teacher" && password === "@123teacher") {
+      localStorage.setItem("userType", "teacher");
+      localStorage.setItem("isLoggedIn", "true");
+      toast({
+        title: "Login Successful",
+        description: "Welcome to Teacher Panel",
+      });
+      setLocation("/teacher");
     } else if (username === "student" && password === "@123student") {
       localStorage.setItem("userType", "student");
       localStorage.setItem("isLoggedIn", "true");
@@ -90,6 +98,7 @@ export default function LoginPage() {
           <div className="mt-4 text-center text-sm text-muted-foreground">
             <p>Demo Credentials:</p>
             <p className="mt-1">Student: student / @123student</p>
+            <p>Teacher: teacher / @123teacher</p>
             <p>Admin: admin / @123admin</p>
           </div>
         </CardContent>

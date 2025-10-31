@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { HeroSection } from "@/components/HeroSection";
 import { DashboardStatsCard } from "@/components/DashboardStatsCard";
 import { TimetableCard } from "@/components/TimetableCard";
@@ -9,30 +10,73 @@ import { useLocation } from "wouter";
 
 export default function StudentDashboard() {
   const [, setLocation] = useLocation();
+  const [announcements, setAnnouncements] = useState([]);
+  const [currentDay, setCurrentDay] = useState('');
 
-  // todo: remove mock functionality
-  const todayClasses = [
-    { code: 'EL301', title: 'Java', room: 'IT Lab', time: '10:00-11:40', teacher: 'Mr. Bhupendra Rana' },
-    { code: 'CS302', title: 'E-COMM', room: 'IT Lab', time: '11:40-1:20', teacher: 'Mrs. Reena' },
-    { code: 'CS301', title: 'MP', room: 'IT Lab', time: '1:40-3:20', teacher: 'Mr. Bhupendra Rana' },
-  ];
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const response = await fetch('/api/announcements?published=true');
+        if (response.ok) {
+          const data = await response.json();
+          // Filter to show only announcements for students (targetAudience = "all" or "students")
+          const studentAnnouncements = data.filter((announcement: any) =>
+            announcement.targetAudience === "all" || announcement.targetAudience === "students"
+          );
+          const formattedAnnouncements = studentAnnouncements.map((announcement: any) => ({
+            id: announcement.id,
+            title: announcement.title,
+            content: announcement.content,
+            date: announcement.date,
+            priority: announcement.priority.toLowerCase(),
+          }));
+          setAnnouncements(formattedAnnouncements);
+        }
+      } catch (error) {
+        console.error('Failed to fetch announcements:', error);
+      }
+    };
 
-  const announcements = [
-    {
-      id: '1',
-      title: 'Zonal Games Starting Next Week',
-      content: 'All students are invited to participate in the annual zonal games.',
-      date: 'Oct 25, 2025',
-      priority: 'high' as const,
-    },
-    {
-      id: '2',
-      title: 'New Study Materials Available',
-      content: 'Updated course materials for Microprocessors and Java Programming.',
-      date: 'Oct 23, 2025',
-      priority: 'medium' as const,
-    },
-  ];
+    fetchAnnouncements();
+
+    // Set current day
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const today = new Date().getDay();
+    setCurrentDay(days[today]);
+  }, []);
+
+  // Mock timetable data - organized by day
+  const timetableData = {
+    Monday: [
+      { code: 'EL301', title: 'Java', room: 'IT Lab', time: '10:00-11:40', teacher: 'Mr. Bhupendra Rana' },
+      { code: 'CS302', title: 'E-COMM', room: 'IT Lab', time: '11:40-1:20', teacher: 'Mrs. Reena' },
+      { code: 'CS301', title: 'MP', room: 'IT Lab', time: '1:40-3:20', teacher: 'Mr. Bhupendra Rana' },
+    ],
+    Tuesday: [
+      { code: 'CS301', title: 'MP', room: 'IT Lab', time: '9:00-10:40', teacher: 'Mr. Bhupendra Rana' },
+      { code: 'EL301', title: 'Java', room: 'IT Lab', time: '10:40-12:20', teacher: 'Mr. Bhupendra Rana' },
+      { code: 'CS302', title: 'E-COMM', room: 'IT Lab', time: '1:40-3:20', teacher: 'Mrs. Reena' },
+    ],
+    Wednesday: [
+      { code: 'CS302', title: 'E-COMM', room: 'IT Lab', time: '9:00-10:40', teacher: 'Mrs. Reena' },
+      { code: 'EL301', title: 'Java', room: 'IT Lab', time: '10:40-12:20', teacher: 'Mr. Bhupendra Rana' },
+      { code: 'CS301', title: 'MP', room: 'IT Lab', time: '1:40-3:20', teacher: 'Mr. Bhupendra Rana' },
+    ],
+    Thursday: [
+      { code: 'CS301', title: 'MP', room: 'IT Lab', time: '9:00-10:40', teacher: 'Mr. Bhupendra Rana' },
+      { code: 'EL301', title: 'Java', room: 'IT Lab', time: '10:40-12:20', teacher: 'Mr. Bhupendra Rana' },
+      { code: 'CS302', title: 'E-COMM', room: 'IT Lab', time: '1:40-3:20', teacher: 'Mrs. Reena' },
+    ],
+    Friday: [
+      { code: 'CS302', title: 'E-COMM', room: 'IT Lab', time: '9:00-10:40', teacher: 'Mrs. Reena' },
+      { code: 'EL301', title: 'Java', room: 'IT Lab', time: '10:40-12:20', teacher: 'Mr. Bhupendra Rana' },
+      { code: 'CS301', title: 'MP', room: 'IT Lab', time: '1:40-3:20', teacher: 'Mr. Bhupendra Rana' },
+    ],
+    Saturday: [],
+    Sunday: []
+  };
+
+  const todayClasses = timetableData[currentDay as keyof typeof timetableData] || [];
 
   return (
     <div className="space-y-6">
@@ -75,7 +119,7 @@ export default function StudentDashboard() {
               View Full Timetable
             </Button>
           </div>
-          <TimetableCard day="Monday" classes={todayClasses} />
+          <TimetableCard day={currentDay} classes={todayClasses} />
         </div>
         
         <div>

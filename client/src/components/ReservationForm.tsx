@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Calendar, Clock } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Resource {
   id: string;
@@ -29,22 +30,70 @@ export function ReservationForm({ resources, onSubmit }: ReservationFormProps) {
   const [date, setDate] = useState("");
   const [timeFrom, setTimeFrom] = useState("");
   const [timeTo, setTimeTo] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const reservation = {
-      resourceId: selectedResource,
-      date,
-      timeFrom,
-      timeTo,
-    };
-    console.log("Reservation submitted:", reservation);
-    onSubmit?.(reservation);
-    // Reset form
-    setSelectedResource("");
-    setDate("");
-    setTimeFrom("");
-    setTimeTo("");
+
+    if (!selectedResource || !date || !timeFrom || !timeTo) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const selectedResourceData = resources.find(r => r.id === selectedResource);
+      const reservation = {
+        userId: "current-user-id", // TODO: Get from auth context
+        resourceId: selectedResource,
+        resourceName: selectedResourceData?.name || "",
+        date,
+        timeFrom,
+        timeTo,
+      };
+
+      const response = await fetch("/api/reservations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reservation),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit reservation");
+      }
+
+      const result = await response.json();
+
+      toast({
+        title: "Success",
+        description: "Reservation request submitted successfully. Awaiting admin approval.",
+      });
+
+      onSubmit?.(result);
+
+      // Reset form
+      setSelectedResource("");
+      setDate("");
+      setTimeFrom("");
+      setTimeTo("");
+    } catch (error) {
+      console.error("Reservation submission error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to submit reservation. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -116,8 +165,8 @@ export function ReservationForm({ resources, onSubmit }: ReservationFormProps) {
             </div>
           </div>
 
-          <Button type="submit" className="w-full" data-testid="button-submit-reservation">
-            Request Reservation
+          <Button type="submit" className="w-full" data-testid="button-submit-reservation" disabled={isSubmitting}>
+            {isSubmitting ? "Submitting..." : "Request Reservation"}
           </Button>
         </form>
       </CardContent>

@@ -1,3 +1,5 @@
+"use client"
+
 import { ReactNode, useEffect } from "react";
 import { useLocation } from "wouter";
 import { AppSidebar } from "./AppSidebar";
@@ -8,7 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 
 interface AppLayoutProps {
   children: ReactNode;
-  role?: "student" | "admin";
+  role?: "student" | "admin" | "teacher";
 }
 
 export function AppLayout({ children, role = "student" }: AppLayoutProps) {
@@ -23,6 +25,8 @@ export function AppLayout({ children, role = "student" }: AppLayoutProps) {
     if (!isLoggedIn || isLoggedIn !== "true") {
       setLocation("/login");
     } else if (role === "admin" && userType !== "admin") {
+      setLocation("/");
+    } else if (role === "teacher" && userType !== "teacher") {
       setLocation("/");
     }
   }, [role, setLocation]);

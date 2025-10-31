@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,38 @@ export function ChatbotWidget() {
   ]);
   const [inputValue, setInputValue] = useState("");
 
-  const handleSend = () => {
+  // Listen for navigation events from the campus map
+  useEffect(() => {
+    const handleNavigation = (event: CustomEvent) => {
+      const { location, type } = event.detail;
+      let message = "";
+
+      if (type === 'directions') {
+        message = `I can help you get directions to ${location}. Could you tell me your current location on campus? For example, "I'm at the main gate" or "I'm near the library".`;
+      } else if (type === 'info') {
+        message = `I'd be happy to provide more information about ${location}. What would you like to know? For example, "What facilities are there?" or "What is this building used for?"`;
+      }
+
+      if (message) {
+        const botMessage: Message = {
+          id: Date.now().toString(),
+          text: message,
+          sender: "bot",
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, botMessage]);
+        setIsOpen(true); // Open the chat when triggered from map
+      }
+    };
+
+    window.addEventListener('chatbot-navigate', handleNavigation as EventListener);
+
+    return () => {
+      window.removeEventListener('chatbot-navigate', handleNavigation as EventListener);
+    };
+  }, []);
+
+  const handleSend = async () => {
     if (!inputValue.trim()) return;
 
     const userMessage: Message = {
@@ -34,18 +65,38 @@ export function ChatbotWidget() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue("");
 
-    // Simulate bot response
-    setTimeout(() => {
+    try {
+      // Call the AI API
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: currentInput }),
+      });
+
+      const data = await response.json();
+
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "I'm processing your request. For timetable inquiries, visit the Timetable page. For reservations, check the Reservations section.",
+        text: data.response || "I'm sorry, I'm having trouble processing your request right now.",
         sender: "bot",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, botMessage]);
-    }, 1000);
+    } catch (error) {
+      console.error('Chat API error:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: "I'm sorry, I'm having trouble connecting right now. Please try again later.",
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
   };
 
   const handleReset = () => {

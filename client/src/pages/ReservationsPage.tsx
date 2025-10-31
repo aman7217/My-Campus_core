@@ -2,9 +2,22 @@ import { ReservationForm } from "@/components/ReservationForm";
 import { ChatbotWidget } from "@/components/ChatbotWidget";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+
+interface Reservation {
+  id: string;
+  userId: string;
+  resourceId: string;
+  resourceName: string;
+  date: string;
+  timeFrom: string;
+  timeTo: string;
+  status: string;
+  createdAt: string;
+}
 
 export default function ReservationsPage() {
-  // todo: remove mock functionality
   const resources = [
     { id: '1', name: 'IT Lab', type: 'lab', location: 'IT Block' },
     { id: '2', name: 'Chemistry Lab', type: 'lab', location: 'Labs Block' },
@@ -14,10 +27,36 @@ export default function ReservationsPage() {
     { id: '6', name: 'Seminar Hall', type: 'hall', location: 'Admin Block' },
   ];
 
-  const mockBookings = [
-    { id: '1', resource: 'IT Lab', date: 'Oct 30, 2025', time: '2:00 PM - 4:00 PM', status: 'Approved' },
-    { id: '2', resource: 'Smart Classroom', date: 'Oct 28, 2025', time: '10:00 AM - 12:00 PM', status: 'Pending' },
-  ];
+  const [reservations, setReservations] = useState<Reservation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchReservations();
+  }, []);
+
+  const fetchReservations = async () => {
+    try {
+      const response = await fetch("/api/reservations?userId=current-user-id"); // TODO: Get from auth context
+      if (response.ok) {
+        const data = await response.json();
+        setReservations(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch reservations:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load reservations",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleReservationSubmit = (newReservation: Reservation) => {
+    setReservations(prev => [newReservation, ...prev]);
+  };
 
   return (
     <div className="space-y-6">
@@ -30,7 +69,7 @@ export default function ReservationsPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-1">
-          <ReservationForm resources={resources} />
+          <ReservationForm resources={resources} onSubmit={handleReservationSubmit} />
         </div>
 
         <div className="lg:col-span-2">
@@ -39,27 +78,32 @@ export default function ReservationsPage() {
               <CardTitle>Your Reservations</CardTitle>
             </CardHeader>
             <CardContent>
-              {mockBookings.length === 0 ? (
+              {loading ? (
+                <p className="text-sm text-muted-foreground">Loading reservations...</p>
+              ) : reservations.length === 0 ? (
                 <p className="text-sm text-muted-foreground">No reservations yet</p>
               ) : (
                 <div className="space-y-3">
-                  {mockBookings.map((booking) => (
+                  {reservations.map((reservation) => (
                     <div
-                      key={booking.id}
+                      key={reservation.id}
                       className="border rounded-lg p-4 hover-elevate"
-                      data-testid={`booking-${booking.id}`}
+                      data-testid={`reservation-${reservation.id}`}
                     >
                       <div className="flex items-start justify-between">
                         <div>
-                          <h4 className="font-semibold">{booking.resource}</h4>
+                          <h4 className="font-semibold">{reservation.resourceName}</h4>
                           <p className="text-sm text-muted-foreground mt-1">
-                            {booking.date} · {booking.time}
+                            {reservation.date} · {reservation.timeFrom} - {reservation.timeTo}
                           </p>
                         </div>
                         <Badge
-                          variant={booking.status === 'Approved' ? 'default' : 'secondary'}
+                          variant={
+                            reservation.status === 'approved' ? 'default' :
+                            reservation.status === 'declined' ? 'destructive' : 'secondary'
+                          }
                         >
-                          {booking.status}
+                          {reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)}
                         </Badge>
                       </div>
                     </div>

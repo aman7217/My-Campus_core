@@ -1,0 +1,29 @@
+#include <Servo.h>
+
+Servo myServo;
+
+void setup() {
+  Serial.begin(9600);       // Start Serial
+  myServo.attach(9);        // Servo on pin 9
+  myServo.write(90);        // Start at middle position
+  Serial.println("Arduino Ready - waiting for UP or DOWN voice command...");
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');  // Read command
+    command.trim();  // Remove spaces/newlines
+
+    if (command == "up") {
+      myServo.write(0);    // Move UP (0°)
+      Serial.println("Servo moved UP");
+    }
+    else if (command == "down") {
+      myServo.write(180);  // Move DOWN (180°)
+      Serial.println("Servo moved DOWN");
+    }
+    else {
+      Serial.println("Unknown command: " + command);
+    }
+  }
+}

@@ -1,15 +1,48 @@
+import { useEffect, useState } from "react";
 import { DashboardStatsCard } from "@/components/DashboardStatsCard";
 import { Users, GraduationCap, Bell } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useLocation } from "wouter";
 
 export default function AdminDashboard() {
-  // todo: remove mock functionality
-  const stats = {
-    students: 156,
-    faculty: 12,
-    announcements: 5,
-  };
+  const [, setLocation] = useLocation();
+  const [stats, setStats] = useState({
+    students: 0,
+    faculty: 0,
+    announcements: 0,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        // Fetch students count
+        const studentsResponse = await fetch('/api/students');
+        const studentsData = studentsResponse.ok ? await studentsResponse.json() : [];
+        const studentsCount = studentsData.length;
+
+        // Fetch faculty count
+        const facultyResponse = await fetch('/api/faculty');
+        const facultyData = facultyResponse.ok ? await facultyResponse.json() : [];
+        const facultyCount = facultyData.length;
+
+        // Fetch announcements count
+        const announcementsResponse = await fetch('/api/announcements');
+        const announcementsData = announcementsResponse.ok ? await announcementsResponse.json() : [];
+        const announcementsCount = announcementsData.length;
+
+        setStats({
+          students: studentsCount,
+          faculty: facultyCount,
+          announcements: announcementsCount,
+        });
+      } catch (error) {
+        console.error('Failed to fetch dashboard stats:', error);
+      }
+    };
+
+    fetchStats();
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -42,52 +75,38 @@ export default function AdminDashboard() {
           icon={Bell}
           iconColor="text-orange-600"
         />
+
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Recent Students</CardTitle>
-            <Button variant="outline" size="sm" data-testid="button-manage-students">
+            <Button
+              variant="outline"
+              size="sm"
+              data-testid="button-manage-students"
+              onClick={() => setLocation("/admin/students")}
+            >
               Manage
             </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between items-center p-2 hover:bg-muted rounded">
-                <span>Aarav Sharma - Computer Engg</span>
-              </div>
-              <div className="flex justify-between items-center p-2 hover:bg-muted rounded">
-                <span>Priya Verma - Electrical Engg</span>
-              </div>
-              <div className="flex justify-between items-center p-2 hover:bg-muted rounded">
-                <span>Rahul Kumar - Mechanical Engg</span>
-              </div>
+              {stats.students > 0 ? (
+                <div className="text-muted-foreground">
+                  {stats.students} students enrolled
+                </div>
+              ) : (
+                <div className="text-muted-foreground">
+                  No students enrolled yet
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Faculty Members</CardTitle>
-            <Button variant="outline" size="sm" data-testid="button-manage-faculty">
-              Manage
-            </Button>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between items-center p-2 hover:bg-muted rounded">
-                <span>Dr. Meena Gupta - CSE</span>
-              </div>
-              <div className="flex justify-between items-center p-2 hover:bg-muted rounded">
-                <span>Mr. Bhupendra Rana - CSE</span>
-              </div>
-              <div className="flex justify-between items-center p-2 hover:bg-muted rounded">
-                <span>Mrs. Reena - CSE</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+
       </div>
     </div>
   );

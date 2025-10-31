@@ -1,0 +1,6 @@
+.hero-hero {
+  /* replace existing background-image */
+  background-image: url('/assets/images/polyy.webp');
+  background-size: cover;
+  background-position: center;
+}
