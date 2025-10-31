@@ -139,6 +139,11 @@ function Router() {
           <TeacherAssignmentsPage />
         </AppLayout>
       </Route>
+      <Route path="/teacher/sample-papers">
+        <AppLayout role="teacher">
+          <AdminSamplePapersPage />
+        </AppLayout>
+      </Route>
       <Route path="/teacher/notes">
         <AppLayout role="teacher">
           <TeacherNotesPage />
@@ -186,11 +191,7 @@ function Router() {
           <AdminSettingsPage />
         </AppLayout>
       </Route>
-      <Route path="/admin/sample-papers">
-        <AppLayout role="admin">
-          <AdminSamplePapersPage />
-        </AppLayout>
-      </Route>
+
       <Route path="/admin/teacher-announcements">
         <AppLayout role="admin">
           <AdminTeacherAnnouncementsPage />

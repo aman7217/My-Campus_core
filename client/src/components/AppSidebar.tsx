@@ -35,7 +35,6 @@ export function AppSidebar({ role = "student" }: AppSidebarProps) {
     { title: "Faculty", url: "/admin/faculty", icon: Users },
     { title: "Announcements", url: "/admin/announcements", icon: Bell },
     { title: "Teacher Announcements", url: "/admin/teacher-announcements", icon: Bell },
-    { title: "Sample Papers", url: "/admin/sample-papers", icon: FileCheck },
     { title: "Campus Map", url: "/admin/map", icon: MapPin },
     { title: "Settings", url: "/admin/settings", icon: Settings },
   ];
@@ -45,6 +44,7 @@ export function AppSidebar({ role = "student" }: AppSidebarProps) {
     { title: "Students", url: "/teacher/students", icon: Users },
     { title: "Announcements", url: "/teacher/announcements", icon: Bell },
     { title: "Assignments", url: "/teacher/assignments", icon: FileCheck },
+    { title: "Sample Papers", url: "/teacher/sample-papers", icon: FileCheck },
     { title: "Student Notes", url: "/teacher/notes", icon: FileText },
     { title: "Reservations", url: "/teacher/reservations", icon: Settings },
     { title: "Chatbot", url: "/teacher/chat", icon: MessageCircle },
